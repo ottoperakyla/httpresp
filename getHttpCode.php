@@ -26,7 +26,7 @@ if($httpcode == 301 || $httpcode == 302){
 	} else {
 		echo getJson($url, $httpcode, null);
 	}
-		
+
 } else { //no redirect found, just echo the current page httpcode
 	echo getJson($url, $httpcode, null);
 }
@@ -34,7 +34,7 @@ if($httpcode == 301 || $httpcode == 302){
 function getJson($url, $httpcode, $redirect) {
 	return json_encode(array(
 		"url" => $url,
-		"httpcode" => $httpcode,
-		"redirect" => $redirect
+		"httpCode" => $httpcode,
+		"redirectUrl" => $redirect
 	));
 }

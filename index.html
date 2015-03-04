@@ -16,18 +16,12 @@
 				<h1>Paste urls here</h1>
 				<form action="#">
 					<textarea class="form-control" name="http" id="urls" cols="30" rows="10"></textarea>
-					<button id="getHttpCodes" class="form-control btn-primary btn btn-mini">Validate</button>
+					<button id="getHttpCodes" class="form-control btn-primary btn">Get http codes</button>
 				</form>
 				<div class="row">
 					<div class="col-md-12">
 						<h1>Urls</h1>
-						<table>
-							<tr>
-								<th><a id="sortUrl" href="#">Url</a></th>
-								<th style="text-align:center;"><a id="sortStatus" href="#">Status code <span id="sortDir">&nbsp;</span></a></th>
-							</tr>
-						</table>
-						<table class="table table-striped" id="urlTable">
+						<table id="urlTable" class="table table-striped">
 						</table>
 					</div>
 				</div>
@@ -35,11 +29,20 @@
 		</div>
 	</div>
 
+	<script id="urlTableHeaders" type="template/javascript">
+	// jshint ignore: start
+	<tr id="thRow">
+		<th>Url</th>
+		<th><a id="sortStatus" href="#">Http code <span id="sortDir">&nbsp;</span></a></th>
+		<th>Redirect url</th>
+	</tr>
+	</script>
 	<script id="urlRowTemplate" type="template/javascript">
 	// jshint ignore: start
 	<tr>
-	<td class="urlTd"><a target="_blank" href="{url}">{url}</a></td>
+	<td><a target="_blank" href="{url}">{urlText}</a></td>
 	<td class="statusTd">{httpCode}</td>
+	<td><a target="_blank" href="{redirectUrl}">{redirectUrlText}</a></td>
 	</tr>
 	</script>
 	<script id="urlCounterTemplate" type="template/javascript">

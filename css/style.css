@@ -11,6 +11,7 @@ table{
 	width: 100%;
 }
 td, th{
+	width: 33%;
 	padding: 20px;
 }
 #urlCounter{
@@ -28,4 +29,10 @@ td, th{
 }
 #spinner{
 	margin-right: 10px;
+}
+body.sortUp #sortDir:after{
+	content:'\25BC';
+}
+body.sortDown #sortDir:after{
+	content:'\25B2';
 }
