@@ -1,10 +1,12 @@
 $(function(){
 	'use strict';
 
-	var IS_DEVELOP = true;
+	$.ajaxSetup({cache: false});
+
+	var IS_DEVELOP = false;
 
 	if(IS_DEVELOP)
-		$("#urls").val("amazon.com\ngoogle.com\nfacebook.com");
+		$("#urls").val("foobar\namazonz.com\nwww.google.com\nfacebook.com\nhttp://unicode-table.com/en/25BC/");
 
 	var $urlTable = $("#urlTable");
 	var $getHttpCodesBtn = $("#getHttpCodes");
@@ -15,18 +17,14 @@ $(function(){
 
 	var urlsAdded = [];
 	var urlsObjs = [];
+	var validUrls = [];
 
 	var urlRowsHtml;
 	var URL_TEXT_MAX_CHARS = 44;
 	var doneProcessing = false;
-
+	var urlRegex = /\w+\./;
+	
 	var sorting = 'none';
-	var SORT_DOWN = "&#9660;";
-	var SORT_UP = "&#9650;";
-	var SORT_ARROWS = {
-		'down': SORT_UP,
-		'up': SORT_DOWN
-	};
 
 	$urlTable.append($urlTableHeaders);
 	var $thRow = $("#thRow");
@@ -36,13 +34,17 @@ $(function(){
 		event.preventDefault();
 
 		var urls = $("#urls").val().split("\n");
-		var urlsCount = urls.length;
 
-		if (urlsCount === 0) return;
+		urls.forEach(function(url){
+			if (urlRegex.test(url)) 
+				validUrls.push(url);
+		});
+
+		var validUrlsCount = validUrls.length;
 
 		var $urlCounterHtml = $urlCounterTemplate
 		.replace('{urlCount}', 1)
-		.replace('{urlTotal}', urlsCount);
+		.replace('{urlTotal}', validUrlsCount);
 
 		if(!doneProcessing) {
 			$('body').append($urlCounterHtml);
@@ -51,36 +53,36 @@ $(function(){
 			window.location.reload();
 		}
 
-		$(urls).each(function(idx, url) {
-			if (url.trim().length === 0) 
+		$(validUrls).each(function(idx, url) {
+			if (url.trim().length === 0 || !urlRegex.test(url)) 
 				return;
 
-			$.get('getHttpCode.php', {url: url}, function(response) {
+			url = url.indexOf('http://') === -1 ? 'http://' + url : url;
+
+			$.post('getHttpCode.php', {url: url}, function(response) {
+				console.log('received', response);
 				response = JSON.parse(response);
-				url = url.indexOf('http://') === -1 ? 'http://' + url : url;
+				response.redirectUrl = response.redirectUrl === null ? '' : response.redirectUrl;
 
 				if (urlsAdded.indexOf(url) === -1) {
 					urlsAdded.push(url);
 
-					urlsObjs.push({
+					var urlObj = {
 						url: url,
 						httpCode: response.httpCode,
 						redirectUrl: response.redirectUrl
-					});
+					};
 
-					urlRowsHtml = buildRow({
-						url: url,
-						httpCode: response.httpCode,
-						redirectUrl: response.redirectUrl,
-					}); 
+					urlsObjs.push(urlObj);
+					urlRowsHtml = buildRow(urlObj); 
 
 					$urlTable.append(urlRowsHtml);
 				}	
 
 			})
 			.done(function(){
-				if (idx + 1 === urlsCount) {
-					$("#urlCounter").html('processed ' + urlsCount + ' urls');
+				if (idx + 1 === validUrlsCount) {
+					$("#urlCounter").html('processed ' + validUrlsCount + ' urls');
 					$getHttpCodesBtn.removeClass('btn-primary');
 					$getHttpCodesBtn.addClass('btn-success');
 					$getHttpCodesBtn.html('Reload page');
@@ -112,8 +114,6 @@ $("body").click(function(event){
 
 		this.className = sorting == 'down' ? 'sortDown' : 'sortUp';
 
-		$("#sortStatus").append(SORT_ARROWS[sorting]);
-
 		refreshUrls();
 	} 
 });
@@ -121,10 +121,10 @@ $("body").click(function(event){
 function buildRow(buildFrom){
 	var html = $urlRowTemplate
 			.replace(/{url}/, buildFrom.url)
-			.replace(/{urlText}/, shortenUrlText(buildFrom.url))
+			.replace(/{urlText}/, buildFrom.url)
 			.replace(/{httpCode}/, buildFrom.httpCode)
 			.replace(/{redirectUrl}/, buildFrom.redirectUrl)
-			.replace(/{redirectUrlText}/, shortenUrlText(buildFrom.redirectUrl));
+			.replace(/{redirectUrlText}/, buildFrom.redirectUrl);
 	return html;
 }
 function shortenUrlText(urlText){

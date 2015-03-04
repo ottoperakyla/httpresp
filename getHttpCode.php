@@ -1,6 +1,27 @@
 <?php
 sleep(1);
-$url = $_GET['url'];
+
+if (!isset($_POST['url'])) {
+	return false;
+}
+
+$url = $_POST['url'];
+
+/* todo: fix: theres something wrong with json encoding */
+
+/*
+header('Content-Type: application/json');
+
+if (!filter_var($url, FILTER_VALIDATE_URL)) {
+	echo "invalid url $url";
+	return false;
+}
+
+if (!strrpos("http://", $url)) {
+	$url = "http://" . $url;
+}
+*/
+
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_HEADER, true);    // we want headers
 curl_setopt($ch, CURLOPT_NOBODY, true);    // we don't need body

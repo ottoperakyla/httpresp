@@ -11,8 +11,11 @@ table{
 	width: 100%;
 }
 td, th{
-	width: 33%;
 	padding: 20px;
+	width: 45%;
+}
+th:nth-child(3){
+	width: 10%;
 }
 #urlCounter{
 	position: fixed;
