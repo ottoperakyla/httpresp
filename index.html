@@ -5,16 +5,54 @@
 	<meta name="viewport" content="initial-scale=1">
 	<title>Page Title</title>
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="css/main.css" />
+	<link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
 	<div class="container">
 		<div class="row">	
-		
+			<div class="col-md-12">
+				<h1>Paste urls here</h1>
+				<form action="#">
+					<textarea class="form-control" name="http" id="urls" cols="30" rows="10"></textarea>
+					<button id="getHttpCodes" class="form-control btn-primary btn btn-mini">Validate</button>
+				</form>
+				<div class="row">
+					<div class="col-md-12">
+						<h1>Urls</h1>
+						<table>
+							<tr>
+								<th><a id="sortUrl" href="#">Url</a></th>
+								<th style="text-align:center;"><a id="sortStatus" href="#">Status code <span id="sortDir">&nbsp;</span></a></th>
+							</tr>
+						</table>
+						<table class="table table-striped" id="urlTable">
+						</table>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
+	<script id="urlRowTemplate" type="template/javascript">
+	// jshint ignore: start
+	<tr>
+	<td class="urlTd"><a target="_blank" href="{url}">{url}</a></td>
+	<td class="statusTd">{httpCode}</td>
+	</tr>
+	</script>
+	<script id="urlCounterTemplate" type="template/javascript">
+	// jshint ignore: start
+	<div id="urlCounter">
+	<div id="spinner">
+	<i class="fa fa-spinner fa-pulse"></i>
+	</div>
+	<div id="textWrap">
+	processing url: <span id="urlCount">{urlCount}</span> of <span>{urlTotal}</span>
+	</div>
+	</div>
+	</script>
 	<script src="bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="js/app.js"></script>
 </body>

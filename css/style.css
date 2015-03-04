@@ -1,0 +1,31 @@
+button, input, textarea {
+	display: block;
+}
+button{
+	margin-top: 10px;
+}
+select{
+	min-height: 400px !important;
+}
+table{
+	width: 100%;
+}
+td, th{
+	padding: 20px;
+}
+#urlCounter{
+	position: fixed;
+	top: 20px;
+	left: 20px;
+	font-size: 20px;
+}
+#urlCounter div{
+	float: left;
+}
+#textWrap{
+	position: relative;
+	top: -2px;
+}
+#spinner{
+	margin-right: 10px;
+}
